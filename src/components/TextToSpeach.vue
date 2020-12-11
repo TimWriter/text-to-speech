@@ -1,32 +1,14 @@
 <template>
   <div class="text-to-speech">
     <div id="app">
-  <transition name="fade" v-if="isLoading">
-    <pulse-loader></pulse-loader>
-  </transition>
 
   <transition name="fade" v-if="!isLoading">
     <div class="form-container">
 
       <form @submit.prevent="speak">
-        <h1>Speech Example</h1>
+        <h3>{{localTranslate.output}}</h3>
 
-        <div class="form-group" v-if="voiceList.length">
-          <label for="voices">Select a voice</label>
-          <select class="form-control" id="voices" v-model="selectedVoice">
-            <option v-for="(voice, index) in voiceList" v-bind:key="index" 
-            :data-lang="voice.lang" :value="index">
-              {{ voice.name }} ({{ voice.lang }})
-            </option>
-          </select>
-        </div>
-
-        <div class="form-group">
-          <label for="your-name">Your Text</label>
-          <input class="form-control" id="your-name" type="text" v-model="text" required>
-        </div>
-
-        <button type="submit" class="btn btn-success">Speak</button>
+        <button type="submit" class="btn btn-success">Abspielen</button>
       </form>
 
     </div>
@@ -39,10 +21,14 @@
 export default {
   name: 'TextToSpeach',
   props: {
-    msg: String
+    translate: {
+      type: Object,
+    },
   },
   data() {
     return {
+      localTranslate: '',
+      isLoading: true,
       text: '',
       selectedVoice: 0,
       synth: window.speechSynthesis,
@@ -51,6 +37,9 @@ export default {
     }
   },
   mounted() {
+    
+    this.localTranslate = this.translate;
+
     // wait for voices to load
     // I can't get FF to work without calling this first
     // Chrome works on the onvoiceschanged function
@@ -92,9 +81,13 @@ export default {
       // it should be 'craic', but it doesn't sound right
       this.greetingSpeech.text = this.text;
 
-      this.greetingSpeech.voice = this.voiceList[this.selectedVoice];
-      
-      
+      if(this.localTranslate.to == 'de-DE'){
+        this.greetingSpeech.voice = this.voiceList[2];
+      }
+      if(this.localTranslate.to == 'en-US'){
+        this.greetingSpeech.voice = this.voiceList[3];
+      }
+
       this.synth.speak(this.greetingSpeech);
     },
   }
