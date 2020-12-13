@@ -1,18 +1,22 @@
 <template>
   <div class="text-to-speech">
     <div id="app">
-
-  
-    <div class="form-container">
-
+    <div class="form-container"  v-bind:class="{ active: localTranslate.output !== '', hidden: localTranslate.output == '' }">
       <form @submit.prevent="speak">
-        <h3>{{localTranslate.output}}</h3>
-
-        <button type="submit" class="btn btn-success">Abspielen</button>
+        <span v-if="localTranslate.to == 'de-DE'">
+        German
+        </span>
+        <span v-if="localTranslate.to == 'en-US'">
+          English
+        </span>
+        <div>
+          {{localTranslate.output}}
+        </div>
+        <button type="submit" class="btn btn-success">
+          <i class="fas fa-volume-up"></i>
+        </button>
       </form>
-
     </div>
-  
 </div>
   </div>
 </template>
@@ -87,5 +91,57 @@ export default {
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped lang="scss">
+.form-container{
+  position: absolute;
+  left: 50%;
+  bottom: 30vh;
+  background-color:  #4085F4;
+  font-family: 'Roboto', sans-serif;
+  width: 90vw;
+  height: 30vh;
+  transform: translateX(-50%);
+  border-radius: 20px;
+  
+  span{
+    position: absolute;
+    left: 2em;
+    top: 1em;
+    font-size: 1.2em;
+    color: #fff;
+    font-weight: bold;
+  }
 
+  div{
+    position: absolute;
+    left: 2em;
+    top: 3em;
+    font-size: 1.2em;
+    color: #fff;
+  }
+
+  button{
+    position: absolute;
+    right: 2em;
+    top: 1em;
+    appearance: none;
+    outline: none;
+    border: none;
+    background-color:  #4085F4;
+    color: white;
+    font-size: 1.2em;
+    cursor: pointer;
+
+    &:hover{
+      color: #ddd;
+    }
+  }
+}
+
+.hidden{
+  opacity: 0;
+}
+
+.active{
+  transition: .3s;
+}
 </style>
