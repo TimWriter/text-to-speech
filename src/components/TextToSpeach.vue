@@ -2,7 +2,7 @@
   <div class="text-to-speech">
     <div id="app">
 
-  <transition name="fade" v-if="!isLoading">
+  
     <div class="form-container">
 
       <form @submit.prevent="speak">
@@ -12,7 +12,7 @@
       </form>
 
     </div>
-  </transition>
+  
 </div>
   </div>
 </template>
@@ -40,9 +40,6 @@ export default {
     
     this.localTranslate = this.translate;
 
-    // wait for voices to load
-    // I can't get FF to work without calling this first
-    // Chrome works on the onvoiceschanged function
     this.voiceList = this.synth.getVoices()
 
     if (this.voiceList.length) {
@@ -51,8 +48,7 @@ export default {
 
     this.synth.onvoiceschanged = () => {
       this.voiceList = this.synth.getVoices()
-      // give a bit of delay to show loading screen
-      // just for the sake of it, I suppose. Not the best reason
+    
       setTimeout(() => {
         this.isLoading = false
       }, 800)
@@ -61,9 +57,7 @@ export default {
     this.listenForSpeechEvents()
   },
   methods: {
-    /**
-     * React to speech events
-     */
+  
     listenForSpeechEvents () {
       this.greetingSpeech.onstart = () => {
         this.isLoading = true
@@ -74,12 +68,9 @@ export default {
       }
     },
 
-    /**
-     * Shout at the user
-     */
+  
     speak () {
-      // it should be 'craic', but it doesn't sound right
-      this.greetingSpeech.text = this.text;
+      this.greetingSpeech.text = this.localTranslate.output;
 
       if(this.localTranslate.to == 'de-DE'){
         this.greetingSpeech.voice = this.voiceList[2];
