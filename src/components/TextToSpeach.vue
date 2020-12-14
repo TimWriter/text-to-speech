@@ -37,7 +37,7 @@ export default {
       selectedVoice: 0,
       synth: window.speechSynthesis,
       voiceList: [],
-      greetingSpeech: new window.SpeechSynthesisUtterance()
+      speech: new window.SpeechSynthesisUtterance()
     }
   },
   mounted() {
@@ -63,27 +63,27 @@ export default {
   methods: {
   
     listenForSpeechEvents () {
-      this.greetingSpeech.onstart = () => {
+      this.speech.onstart = () => {
         this.isLoading = true
       }
 
-      this.greetingSpeech.onend = () => {
+      this.speech.onend = () => {
         this.isLoading = false
       }
     },
 
   
     speak () {
-      this.greetingSpeech.text = this.localTranslate.output;
+      this.speech.text = this.localTranslate.output;
 
       if(this.localTranslate.to == 'de-DE'){
-        this.greetingSpeech.voice = this.voiceList[2];
+        this.speech.voice = this.voiceList[2];
       }
       if(this.localTranslate.to == 'en-US'){
-        this.greetingSpeech.voice = this.voiceList[3];
+        this.speech.voice = this.voiceList[3];
       }
 
-      this.synth.speak(this.greetingSpeech);
+      this.synth.speak(this.speech);
     },
   }
 }
